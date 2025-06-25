@@ -1,270 +1,343 @@
 # Laporan Proyek Machine Learning - Rahmah Fauziah
 
-![image](https://github.com/user-attachments/assets/aa574687-658c-47a9-9ab3-3d10f410587e)
-# House Price Prediction Dataset
+![image](https://github.com/user-attachments/assets/fe0df260-3ab4-49b8-bcec-4635b714aee7)
+# Movie Recommendation System
 
-## Domain Proyek
+## Project Overview
 
-Rumah merupakan bangunan yang memiliki fungsi sebagai tempat tinggal atau hunian makhluk hidup. Dapat dikatakan bahwa rumah menjadi salah satu kebutuhan pokok bagi semua orang. Namun, seiring dengan perkembangan zaman, harga rumah semakin mengalami peningkatan setiap tahunnya. Kecenderungan akan peningkatan harga rumah sulit untuk diprediksi terutama dipengaruhi oleh beberapa faktor seperti lokasi, struktur fisik, dan faktor pendukung lainnya [1]. 
-Keadaan ini dapat menjadi tantangan tersendiri terutama bagi calon pembeli dalam memperkirakan harga rumah yang sesuai dengan faktor spesifikasi yang dimiliki. Dalam hal ini, ketidaksesuaian dalam memprediksi harga rumah dapat menimbulkan kerugian. Salah satu kerugian yang dapat dialami seperti harga rumah yang cenderung lebih mahal dengan spesifikasi yang kurang mumpuni. Untuk itu, diperlukan solusi yang dapat memperkirakan harga rumah secara efektif dan efisien. Prediksi tersebut dapat didasari pada spesifikasi rumah seperti luas bangunan, jumlah kamar tidur, dan spesifikasi lainnya [2]. 
-Untuk mengatasi permasalahan tersebut, proyek ini dibangun dengan memanfaatkan Machine Learning melalui algoritma Random Forest, K-Nearest Neighbor (KNN), dan algoritma Boosting. Proyek ini diharapkan dapat membantu pengguna baik penjual dan pembeli dalam menentukan keputusan terkait dengan harga rumah yang akurat.
+Di era perkembangan teknologi digital saat ini membuat industri perfilman saling bersaing satu sama lain dalam memproduksi film yang menarik banyak penonton. Berbagai macam film dengan alur hingga tema cerita yang berbeda maupun serupa masif diproduksi dan mudah diakses dalam berbagai platform digital. Kegiatan menonton film telah menjadi salah satu bentuk hiburan yang dapat mengatasi kejenuhan akan suatu hal. Di lain sisi, semakin banyaknya film yang tersedia menyebabkan permasalahan yaitu penonton sulit untuk menentukan film mana yang akan ditonton. Dalam menentukan pilihannya, penonton biasanya bergantung pada hasil review pengguna lain. Namun mengingat jumlah review banyak semakin mempersulit dalam mencari film yang sesuai dengan keinginan sehingga memakan banyak waktu [1]. Untuk itu, diperlukan sistem rekomendasi film dalam memberikan saran yang sesuai dengan keinginan pengguna. Sistem rekomendasi digunakan untuk merekomendasikan suatu item pada pengguna dengan memperkirakan nilai item tersebut, di mana apabila memiliki nilai prediksi tinggi akan ditampilkan sebagai rekomendasi utama [2]. Adapun pendekatan pada sistem rekomendasi meliputi dua macam yaitu _Content-Based Filtering_ dan C_ollaborative Filtering_. _Content-Based Filtering_ adalah pendekatan rekomendasi yang mengacu pada fitur dari konten film seperti genre film [3]. _Collaborative Filtering_ adalah memperkirakan relevansi item berdasarkan penilaian dari pengguna, di mana akan merekomendasikan item yang sudah dipilih oleh pengguna dengan pola kesamaan dari pengguna saat ini [4]. 
 
 ## Business Understanding
 
 ### Problem Statements
-- Fitur apa saja yang berpengaruh besar terhadap harga rumah?
-- Bagaimana cara untuk melakukan prediksi harga rumah berdasarkan fitur luas bangunan, jumlah kamar tidur, dan fitur lainnya?
+- Bagaimana cara untuk membangun sistem rekomendasi film yang dapat membantu pengguna dalam menentukan film sesuai dengan keinginan?
+- Bagaimana sistem rekomendasi dapat memberikan saran film yang serupa berdasarkan genre film yang sudah ditonton sebelumnya? 
 
 ### Goals
-- Mengetahui fitur yang mempengaruhi harga rumah.
-- Membangun model Machine Learning yang dapat memprediksi harga rumah dengan akurat berdasarkan fitur yang dimiliki.
+- Mengembangkan sistem rekomendasi film yang dapat membantu pengguna menemukan film yang sesuai dengan teknik pendekatan _content-based filtering_.
+- Menghasilkan sistem rekomendasi yang dapat memuaskan pengguna dalam memilih film berdasarkan keakuratan dan relevansi.
 
-### Solution Statement
-Untuk mencapai tujuan tersebut, solusi yang digunakan dalam membangun model prediksi yaitu memanfaatkan beberapa algoritma berikut ini:
-- K-Nearest Neighbor : mengaplikasikan kemiripan fitur dalam memprediksi nilai pada suatu data.
-- Random Forest : model machine learning termasuk ke dalam kategori ensemble atau model prediksi erdiri dari beberapa model dan bekerja secara bersama-sama.
-- Algoritma Boosting : model dilatih secara berurutan atau dalam proses yang iteratif.
-Selain itu, menangani proses outlier, one-hot encoding, melakukan proses scaling pada fitur numerik dengan menggunakan StandarScaler, serta melakukan proses evaluasi dengan menggunakan metrik Mean Squared Error (MSE).
+### Solution statements
+Untuk mencapai tujuan tersebut, solusi yang digunakan dalam membangun sistem rekomendasi film yaitu memanfaatkan pendekatan berikut ini:
+- _Content-Based Filtering_: rekomendasi berdasarkan item yang mirip dengan item yang disukai pengguna dengan teknik TF-IDF Vectorizer dan Cosine Similarity.
 
 ## Data Understanding
-Data yang digunakan dalam proyek ini adalah [House Price Prediction Dataset](https://www.kaggle.com/datasets/jacksondivakarr/house-price-prediction-dataset) diperoleh dari platform Kaggle. Dataset ini memiliki jumlah sekitar 29.135 data yang berkaitan dengan rumah mewakili 6 fitur yaitu Unnamed: 0, City, Price, Area, Location, dan No. of Bedrooms.
+Data yang digunakan dalam proyek ini adalah [Movie Recommendation System](https://www.kaggle.com/datasets/parasharmanas/movie-recommendation-system) diperoleh dari platform Kaggle. Dataset ini memiliki 2 file csv yaitu `movies.csv` dan `ratings.csv`. Untuk data movies.csv memiliki 3 kolom yaitu movieId, title, dan genres. Adapun data untuk ratings.csv memiliki 4 kolom yaitu userId, movieId, rating, dan timestamp. 
 
-### Variabel-variabel pada House Price Prediction Dataset adalah sebagai berikut:
-- `Unnamed: 0` : dapat dikatakan sebagai kolom index baris asli dari dataset yang tidak memuat informasi penting.
-- `City` : merupakan kota dari rumah tersebut berada seperti Mumbai, Kolkata, Bangalore, Chennai, Delhi, dan Hyderabad.
-- `Price` : merupakan harga rumah yang dijadikan sebagai variabel target jual rumah.
-- `Area` : merupakan luas bangunan dari rumah.
-- `Location` : merupakan lokasi spesifik rumah seperti New Town, Kharghar, Thane West, Mira Road East, Rajarhat, Uttam Nagar, Noida, Tangra, Ulwe, Dwarka Mor, dan lokasi lainnya.
-- `No. of Bedrooms` : merupakan jumlah kamar tidur dalam rumah.
+Variabel-variabel pada Movie Recommendation System adalah sebagai berikut:
 
-### Exploratory Data Analysis
-Tahapan Exploratory Data Analysis (EDA) dilakukan untuk mengetahui investigasi awal untuk melakukan analisis karakteristik dari dataset sebelum dilakukan pemodelan. Proses ini mencakup deskripsi variabel, menangani missing value dan outlier, univariate analysis, dan multivariate analysis.
+- `movieId` : Id unik terkait film.
+- `title` : Judul film beserta dengan tahun perilisan.
+- `genres` : kategori film yang terdiri lebih dari satu genre.
+- `userId` : Id unik pengguna.
+- `rating` : Nilai rating yang diberikan pengguna.
+- `timestamp` : Waktu pemberian rating oleh pengguna. 
 
-#### 1. Exploratory Data Analysis - Deskripsi Variabel
-Proses ini dilakukan melalui pengecekan informasi pada dataset dengan fungsi `info()`. Berdasarkan fungsi tersebut, diketahui bahwa:
-- Terdapat 2 kolom kategorikal dengan tipe data object yaitu kolom City dan Location.
-- Terdapat 4 kolom numerik dengan tipe data int64 yaitu Unnamed: 0, Price, Area, dan No. of Bedrooms.
-- Kolom target pada dataset ini yaitu Price.
-     
-![image](https://github.com/user-attachments/assets/45a5d817-f140-4a44-a528-1caab6d332f8)
+### Exploratory Data Analysis 
+Tahap ini dilakukan untuk mengetahui investigasi awal untuk melakukan analisis karakteristik dari dataset.
+#### Univariate Analysis
+Tahapan ini untuk melakukan analisis dan eksplorasi setiap variabel pada data. Adapun variabel nya meliputi 2 macam yaitu movies dan ratings.
 
-- Adapun tahapan untuk mengecek deskripsi statistik data dengan fitur `describe()`. Fungsi describe() memberikan informasi statistik pada masing-masing kolom, antara lain:
-- Count  adalah jumlah sampel pada data.
+- `movies` : merupakan data yang berisikan informasi terkait film yang meliputi kolom movieId, title, dan genres.
+- `ratings` : merupakan data rating dari film berisikan kolom userId, movieId, rating, dan timestamp.
+  
+#### 1. Eksplorasi Variabel
+Proses ini dilakukan melalui pengecekan informasi pada data movies dan ratings dengan fungsi `info()`.
+- Data `movies.csv`
+
+Dapat diketahui bahwa jumlah data movies.csv sebanyak 62423 entri dan 3 kolom. Terdapat 3 kolom untuk data movies meliputi:
+- movieId merupakan Id film yang bertipe data int64.
+- title merupakan judul film yang memiliki tipe data object.
+- genres merupakan genre pada film yang memiliki tipe data object.
+      
+Bentuk tampilan baris pada data movies.csv melalui fungsi `head()` dengan menampilkan lima baris pertama berikut ini.
+
+  | movieId | Title                              | Genres                                          |
+  |---------|------------------------------------|-------------------------------------------------|
+  | 1       | Toy Story (1995)                   | Adventure, Animation, Children, Comedy, Fantasy |
+  | 2       | Jumanji (1995)                     | Adventure, Children, Fantasy                    |
+  | 3       | Grumpier Old Men (1995)            | Comedy, Romance                                 |
+  | 4       | Waiting to Exhale (1995)           | Comedy, Drama, Romance                          |
+  | 5       | Father of the Bride Part II (1995) | Comedy                                          |
+
+Tabel tersebut menampilkan tiga kolom yaitu movieId, title, dan genres yang berisikan data setiap kolom. Untuk movieId berisikan data nilai unik setiap film, title berisikan judul film dilengkapi dengan tahun perilisannya, dan genres berisikan macam-macam genre dari film dengan dipisahkan oleh tanda (|).
+
+- Data `ratings.csv`
+
+Dapat diketahui bahwa jumlah data ratings.csv sebanyak 25000095 baris dan 4 kolom. Terdapat 4 kolom untuk data ratings meliputi:
+- userId merupakan Id pengguna yang bertipe data int64.
+- movieId merupakan Id film bertipe data int64.
+- rating merupakan nilai rating film yang bertipe data float64.
+- timestamp merupakan waktu pemberian rating yang bertipe data int64.
+      
+Bentuk tampilan baris pada data ratings.csv melalui fungsi `head()` dengan menampilkan lima baris pertama berikut ini.
+
+  | userId | movieId | rating | timestamp   |
+  |--------|---------|--------|-------------|
+  | 1      | 296     | 5.0    | 1147880044  |
+  | 1      | 306     | 3.5    | 1147868817  |
+  | 1      | 307     | 5.0    | 1147868828  |
+  | 1      | 665     | 5.0    | 1147878820  |
+  | 1      | 899     | 3.5    | 1147868510  |
+
+Tabel tersebut menampilkan empat kolom yaitu userId, movieId, rating, dan timestamp yang berisikan data setiap kolom. Untuk userId berisikan data nilai unik pengguna, movieId berisikan data nilai unik setiap film, rating berisikan nilai rating yang diberikan pengguna, dan timestamp berisikan waktu pemberian rating.
+
+Pada data ratings.csv dilakukan pengecekan deskripsi statistik data ratings dengan fitur `describe()`. Fungsi describe() memberikan informasi statistik pada masing-masing kolom, antara lain:
+- Count adalah jumlah sampel pada data.
 - Mean adalah nilai rata-rata.
 - Std adalah standar deviasi.
 - Min yaitu nilai minimum setiap kolom.
 - 25% adalah kuartil pertama. Kuartil adalah nilai yang menandai batas interval dalam empat bagian sebaran yang sama.
 - 50% adalah kuartil kedua, atau biasa juga disebut median (nilai tengah).
 - 75% adalah kuartil ketiga.
-Diketahui bahwa Unnamed: 0 memiliki nilai rata-rata sebesar 3058.808238, nilai min nya itu 0, dan max itu 7718. Pada fitur Price memiliki nilai rata-rata sebesar 1.195267e+07, min 2.000000e+06, dan max 8.546000e+08. Untuk fitur Area memiliki nilai rata-rata sebesar 1301.816475, nilai min 200, dan max 16000. Untuk No. of Bedrooms memiliki nilai mean 2.421074, dengan nilai minimal dan maksimal masing-masing berjumlah 1 dan 9.
 
-![image](https://github.com/user-attachments/assets/38a62547-7873-48a9-af89-04c82601d88f)
+Diketahui bahwa nilai maksimum rating adalah 5 dan nilai minimum adalah 0,5. Untuk rata-rata pemberian rating oleh pengguna berada di kisaran 3,5. Hal ini menunjukkan bahwa pengguna memberikan rating yang cukup tinggi untuk film nya. Jumlah pengguna dan film memiliki nilai maksimum 1.625410e+05 dan dan 2.091710e+05 dan nilai minimum adalah 1.000000e+00.
 
-#### 2. Exploratory Data Analysis - Menangani Missing Value dan Outliers
-Tahapan ini dilakukan untuk mengetahui kolom yang memiliki missing value, baris yang duplikasi, dan outlier. Pada data ini tidak ada nilai yang kosong dan duplikasi. Dapat ditinjau bahwa pada gambar dibawah ini yang menunjukkan tidak adanya missing value:
+  |           | userId       | movieId      | rating       | timestamp    |
+  |-----------|--------------|--------------|--------------|--------------|
+  | count     | 2.500010e+07 | 2.500010e+07 | 2.500010e+07 | 2.500010e+07 |
+  | mean      | 8.118928e+04 | 2.138798e+04 | 3.533854e+00 | 1.215601e+09 |
+  | std       | 4.679172e+04 | 3.919886e+04 | 1.060744e+00 | 2.268758e+08 |
+  | min       | 1.000000e+00 | 1.000000e+00 | 5.000000e-01 | 7.896520e+08 |
+  | 25%       | 4.051000e+04 | 1.196000e+03 | 3.000000e+00 | 1.011747e+09 |
+  | 50%       | 8.091400e+04 | 2.947000e+03 | 3.500000e+00 | 1.198868e+09 |
+  | 75%       | 1.215570e+05 | 8.623000e+03 | 4.000000e+00 | 1.447205e+09 |
+  | max       | 1.625410e+05 | 2.091710e+05 | 5.000000e+00 | 1.574328e+09 |
 
-![image](https://github.com/user-attachments/assets/15f820f1-dac7-4670-9caf-c2a8a2554331)
+Pada data ratings melakukan peninjauan terhadap banyaknya pengguna yang memberikan rating dan banyaknya jumlah rating. Dapat diketahui bahwa jumlah pengguna yang memberikan rating berdasarkan kolom unik yaitu userId sebanyak 162541 sedangkan untuk jumlah rating sebanyak 25000095. Proses ini dilakukan menggunakan kode:
+```
+print('Jumlah userId: ', len(ratings['userId'].unique()))
+print('Jumlah data rating: ', len(ratings))
+```
+**Output:** 
+  ```
+  Jumlah userId:  162541
+  Jumlah data rating:  25000095
+  ```
 
-Adapun untuk mengetahui apakah baris setiap kolom memiliki nilai yang duplikat:
+#### 2. Pengecekan nilai missing value
+Pada tahap ini melakukan pengecekan terhadap kolom data movies dan ratings apakah memiliki nilai missing values dengan menggunakan fungsi `isnull().sum()`. Pada data ini tidak ada nilai yang kosong sehingga keluaran berupa 0.
+**Data Movies:**
 
-![image](https://github.com/user-attachments/assets/c9bba7f3-da61-4500-a99a-5561e6de1d43)
+![image](https://github.com/user-attachments/assets/b8b0ce21-a5dc-4d68-9d1d-a7a4d3b71e29)
 
-Adapun melakukan pengecekan outlier pada data numerik yaitu salah satunya pada fitur No. of Bedrooms. 
+**Data Ratings:**
 
-![image](https://github.com/user-attachments/assets/ebfc480f-ba37-4527-beb8-9dec65fc7f24)
+![image](https://github.com/user-attachments/assets/8d2448d3-e65f-4e70-96fa-bf36d934bf27)
 
-#### 3. Exploratory Data Analysis - Univariate Analysis
-Pada tahap ini melakukan analisis data terhadap fitur yang ada, di mana untuk data kategorikal meliputi fitur City dan Location. Terdapat 6 kategori pada fitur city yaitu Mumbai, Kolkata, Bangalore, Chennai, Delhi, dan Hyderabad. Dalam persentase ditunjukkan bahwa lebih dari 40% kota untuk rumah yang banyak diminati terdapat di kota Mumbai dan Kolkata.
-   
-![image](https://github.com/user-attachments/assets/c6ae8a2a-7d60-4794-afde-f9eebd1f3a5d)
+#### 3. Pengecekan duplikasi data
+Tahap ini untuk melakukan identifikasi pada data movies dan ratings apakah terdapat baris yang memiliki duplikasi menggunakan fungsi `duplicated()`. Diketahui bahwa tidak ada baris yang memiliki duplikasi ditunjukkan dengan keluaran `Baris duplikat: Empty DataFrame`.
+**Data Movies:**
 
-Adapun untuk fitur Location yang diambil 10 kategori dengan jumlah paling banyak secara berurutan yaitu: New Town, Kharghar, Thane West, Mira Road East, Rajarhat, Uttam Nagar, Noida, Tangra, Ulwe, dan Dwarka Mor. Dari data persentase dapat kita simpulkan bahwa lokasi rumah terbanyak berada di New Town sebesar 2.5% dari total 645 sampel, dan sisanya tersebar di berbagai lokasi lainnya.
+![image](https://github.com/user-attachments/assets/e187cc06-0e47-4426-9aae-c11d3d3bd189)
 
-![image](https://github.com/user-attachments/assets/f4a57782-c3be-45b8-ba83-fda898688c1e)
+**Data Ratings:**
 
-Adapun pada fitur numerik di bawah ini, di mana menunjukkan visualisasi distribusi pada data numerik. Dapat diketahui bahwa sebagian besar harga rumah mengalami penurunan. Salah satunya pada fitur Price yang merupakan target dalam proyek ini menunjukkan grafik mengalami penurunan seiring dengan semakin banyaknya jumlah sampel. Hal ini dapat dikatakan bahwa distribusi harga miring ke kanan atau right-skewed. Rentang harga rumah dapat dikatakan cukup luas dengan sebagian besar rumah berada di bawah kisaran 10 juta.
+![image](https://github.com/user-attachments/assets/67ff456a-9671-4f51-8106-7bbb4149559f)
 
-![image](https://github.com/user-attachments/assets/8efb0d5f-d994-4097-b4f3-656c1d9e3401)
-
-![image](https://github.com/user-attachments/assets/b2ed47aa-df68-414d-9c15-2f2415293f8d)
-     
-#### 4. Exploratory Data Analysis - Multivariate Analysis
-Pada tahap ini menunjukkan hubungan antara dua atau lebih variabel. Gambar dibawah ini menunjukkan visualisasi rata-rata Price terhadap fitur City dan Location. Pada fitur City, rumah yang memiliki harga tinggi berada pada kota Mumbai sekitar 9,8 juta sedangkan untuk harga terendah berada di kota Kolkata sebesar 5,9 juta. Untuk fitur Location, perbedaan harga antar lokasi cukup signifikan mengingat lokasinya sangat bervariasi, sehingga hanya diambil 10 lokasi saja untuk direpresentasikan. Lokasi yang memiliki harga tertinggi yaitu Thane West sekitar 10 juta, diikuti dengan Kharghar 9 jutaan, dan Mira Road East 8 jutaan. Untuk lokasi dengan rata-rata harga terendah yaitu berada dalam rentang harga 3-4 jutaan yaitu pada lokasi Noida, Uttam Nagar, dan Dwarka Mor. Dapat dikatakan bahwa fitur City dan Location memiliki pengaruh terhadap rata-rata harga rumah.
-
-![image](https://github.com/user-attachments/assets/4e2e65ac-4b42-4d3a-bea5-0a459168c71e)
-
-![image](https://github.com/user-attachments/assets/62c40aec-a0a6-42c1-8ed2-965b9433e7b6)
-
-Adapun untuk fitur numerik, dilakukan observasi hubungan antara fitur numerik dengan fitur target menggunakan fungsi `pairplot()`. Gambar dibawah ini menunjukkan korelasi antara fitur numerik dengan fitur target (Price). Diketahui bahwa relasi fitur Area terhadap fitur Price, di mana titik-titik tersebar cukup merata memenuhi seluruh area plot. Dapat dikatakan bahwa terdapat korelasi antara Area dengan Price namun tidak terlalu kuat. Untuk fitur No. of Bedrooms menunjukkan titik-titik yang vertikal terhadap jumlah kamar, di mana banyaknya kamar tidur dapat mempengaruhi harga rumah, sehingga Price dengan No. of Bedrooms memiliki korelasi yang lemah.
-
-![image](https://github.com/user-attachments/assets/a24c0a32-897f-42fa-a592-eb3ecdb610bb)
-
-Untuk melihat hubungan korelasi matrix antar fitur numerik menggunakan fungsi `heatmap()`. Dapat dilihat bahwa fitur Area memiliki korelasi yang kuat terhadap Price sebesar 0,3. Dapat dikatakan bahwa fitur Area atau luas bangunan memiliki pengaruh terhadap harga rumah. Sementara untuk fitur No. of Bedrooms memiliki nilai korelasi rendah terhadap Price yaitu sebesar 0,15. Terdapat pula korelasi yang cukup kuat pada fitur Area terhadap fitur No. of Bedrooms sebesar 0,74 yang dapat dikatakan bahwa banyaknya jumlah kamar tidur mempengaruhi luas bangunan rumah.
-   
-![image](https://github.com/user-attachments/assets/d40d8f2d-a0d0-49b8-a34c-12c9009ac8a9)
-     
 ## Data Preparation
-Tahapan ini adalah tahapan untuk melakukan proses transformasi pada data sehingga menjadi bentuk yang cocok untuk proses pemodelan. Tahapan preparation meliputi penanganan outlier, encoding fitur kategori, pembagian dataset, dan proses standarisasi.
-#### 1. Penanganan Outlier
-Penanganan outlier dilakukan pada fitur numerik yaitu Area, Price, dan No. of Bedrooms menggunakan metode IQR (Inter Quartile Range). Proses ini dilakukan untuk mengidentifikasi outlier yang berada di luar Q1 dan Q3. Nilai apa pun yang berada di luar batas ini dianggap sebagai outlier. Adapun bentuk persamaan:
+Tahapan ini adalah tahapan untuk mempersiapkan data sebelum tahap modelling. Adapun hal yang dilakukan pada tahap ini yaitu:
+### 1. Mengubah Format Timestamp
+Pada tahap ini diawali dengan melakukan perubahan tipe data timestamp menjadi datetime melalui fungsi `pd.to_datetime`, sehingga menampilkan hasil perubahan data pada kolom timestamp menjadi bentuk datetime.
 
-$$
-\text{Batas bawah} = Q1 - 1.5 \times IQR
-$$
+  | userId | movieId | rating | timestamp           |
+  |--------|---------|--------|---------------------|
+  | 1      | 296     | 5.0    | 2006-05-17 15:34:04 |
+  | 1      | 306     | 3.5    | 2006-05-17 12:26:57 |
+  | 1      | 307     | 5.0    | 2006-05-17 12:27:08 |
+  | 1      | 665     | 5.0    | 2006-05-17 15:13:40 |
+  | 1      | 899     | 3.5    | 2006-05-17 12:21:50 |
 
-$$
-\text{Batas atas} = Q3 + 1.5 \times IQR
-$$
+### 2. Menggabungkan Data Ratings dan Movies
+Pada tahap ini pula melakukan penggabungan data ratings dengan movies berdasarkan nilai movieId menggunakan fungsi `merge()`. Hal tersebut menghasilkan penggabungan data ratings dengan movies yang di mana kolom title dan genres pada data movies ditambahkan ke sebelah kiri pada kolom data ratings, sehingga menghasilkan 6 kolom dan 25000095 baris, seperti:
 
-Persamaan tersebut diimplementasikan pada kode berikut ini:
+![image](https://github.com/user-attachments/assets/bea3c9b1-a9e9-45e9-90ba-6f8f8d231cb7)
 
+### 3. Mengurutkan Data movies_info Berdasarkan movieId
+Kemudian, dilanjutkan dengan melakukan proses pengurutan movies_info berdasarkan movieId kemudian memasukkannya ke dalam variabel fix_movies. Proses ini dengan menggunakan fungsi `sort_values()` melalui teknik Ascending atau mengurutkan nilai dari yang terkecil ke terbesar, di mana memiliki jumlah baris 25000095 dan 6 kolom. Hal ini dilakukan agar data terlihat rapi dan berurutan.
+
+![image](https://github.com/user-attachments/assets/75e5c62d-1f16-4e21-9ace-cb73452c53e3)
+
+### 4. Pengecekan Nilai Unik
+Tahap selanjutnya melakukan pengecekan jumlah dari fix_movies berdasarkan movieId yang bernilai unik menggunakan kode di bawah ini. Hasil menunjukkan bahwa jumlah data dari fix_movies adalah 59047.
 ```
-# Ambil hanya kolom numerikal
-numeric_cols = house.select_dtypes(include='number').columns
-# Hitung Q1, Q3, dan IQR hanya untuk kolom numerikal
-Q1 = house[numeric_cols].quantile(0.25)
-Q3 = house[numeric_cols].quantile(0.75)
-IQR = Q3 - Q1
-# Buat filter untuk menghapus baris yang mengandung outlier di kolom numerikal
-filter_outliers = ~((house[numeric_cols] < (Q1 - 1.5 * IQR)) |
-                    (house[numeric_cols] > (Q3 + 1.5 * IQR))).any(axis=1)
-# Terapkan filter ke dataset asli (termasuk kolom non-numerikal)
-house = house[filter_outliers]
-# Cek ukuran dataset setelah outlier dihapus
-house.shape
+len(fix_movies.movieId.unique())
 ```
-**Output:** `(25532, 6)`
+**Output:**
 
-Hasil pada kode tersebut yaitu `(25532, 6)`. Diketahui bahwa terjadi perubahan pada jumlah sampel, di mana jumlah sampel pertama kali ketika load dataset yaitu sebesar 29.135. Namun, ketika outlier sudah ditangani dengan cara dihapus menggunakan metode IQR hasilnya menjadi 25.532 sampel data.
+![image](https://github.com/user-attachments/assets/605bf327-b298-4da5-a334-851dddb14da7)
 
-#### 2. Proses Encoding Fitur Kategorikal
-Tahapan ini dilakukan untuk mengubah nilai kategori yaitu City dan Location menjadi bentuk biner menggunakan teknik OneHotEncoding. Implementasi kode pada tahapan ini:
+### 5. Pengecekan Struktur Kategori Genres yang Unik
+Selain itu, dilakukan pengecekan untuk kategori genres yang unik yang di mana menghasilkan berbagai macam genre dengan adanya kombinasi genre pada film. Proses ini dilakukan melalui kode berikut.
+``` 
+fix_movies.genres.unique()
 ```
-# Encoding Fitur Kategori
-house = pd.concat([house, pd.get_dummies(house['City'], prefix='City')],axis=1)
-house = pd.concat([house, pd.get_dummies(house['Location'], prefix='Location')],axis=1)
-house.drop(['City','Location'], axis=1, inplace=True)
-house = house.astype('int64')
-house.head()
+**Output:**
+
+![image](https://github.com/user-attachments/assets/77f46252-8f41-4ba4-a81b-d6a508cc3ddd)
+
+### 6. Pengecekan Kategori Genres untuk Data (no genres listed)
+Hal ini dilakukan untuk mengetahui film mana saja yang memiliki kategori genre yaitu `no genres listed`. Hasil menunjukkan bahwa terdapat film yang memiliki no genres listed sebanyak 26627 baris dan 6 kolom.
+
+![image](https://github.com/user-attachments/assets/cc34ef8f-7f77-458c-a8bb-4278eb332181)
+
+### 7. Mengubah Nama Kategori Genres (no genres listed) Menjadi ‘unknown’
+Tahap ini untuk melakukan perubahan pada nama kategori genres. Kategori yang dilakukan perubahan yaitu no genres listed menjadi unknown. Proses ini memanfaatkan fungsi `replace()` yang melakukan perubahan secara keseluruhan untuk data genres dengan kategori no genres listed.
+
+![image](https://github.com/user-attachments/assets/f405fc98-b458-45f1-a931-184e1f5f4acf)
+
+### 8. Melakukan Penggantian Karakter dan Hapus Karakter (Pemformatan Ulang)
+Tahap ini adalah melakukan penggantian karakter `|` menjadi `koma (,)` dan menghapus karakter non-alphabet pada data kolom genres, dengan menggunakan fungsi `replace()` pada kode:
 ```
-Diketahui bahwa hasil dari kode tersebut menunjukkan perubahan yang terjadi pada fitur City dan Location di mana nilainya sudah berubah menjadi variabel numerik atau biner.
-
-![image](https://github.com/user-attachments/assets/70f18061-6a7d-4b01-93cf-ff1f8d625b38)
-
-#### 3. Split Dataset
-Tahapan ini digunakan untuk membagi dataset menjadi data latih (train) dan data uji (test) sebelum membuat model. Untuk proporsi pembagian sebesar 80:20 dengan fungsi `train_test_split` dari sklearn.
-
-```X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)```
-
-Diketahui bahwa jumlah sampel setelah dilakukan split dataset untuk data train sebesar 20.425 dan untuk data test sebesar 5.107, sedangkan untuk total keseluruhan dataset yaitu sebesar 25.532 sampel data.
-
-![image](https://github.com/user-attachments/assets/8b16eda2-5479-4ca3-9043-e25b498b4ca2)
-
-#### 4. Standarisasi
-Tahapan standarisasi digunakan pada fitur numerik yaitu Area dan No. of Bedrooms dengan menggunakan teknik `StandardScaler` dari library Scikitlearn. Teknik ini bekerja dengan melakukan proses standarisasi fitur dengan mengurangkan mean (nilai rata-rata) kemudian membaginya dengan standar deviasi untuk menggeser distribusi. StandardScaler menghasilkan distribusi dengan standar deviasi sama dengan 1 dan mean sama dengan 0. Adapun untuk implementasi kode berikut ini:
-
+fix_movies['genres'] = fix_movies['genres'].str.replace('|', ', ', regex=False).str.replace('[^a-zA-Z, ]', '', regex=True)
 ```
-# standarisasi - standarscaler
-numerical_features = ['Area', 'No. of Bedrooms']
-scaler = StandardScaler()
-scaler.fit(X_train[numerical_features])
-X_train[numerical_features] = scaler.transform(X_train[numerical_features])
-X_test[numerical_features] = scaler.transform(X_test[numerical_features])
+
+### 9. Pembuatan Variabel Preparation
+Tahap selanjutnya melakukan pembuatan variabel preparation yang berisi dataframe fix_movies kemudian mengurutkan berdasarkan movieId dengan jumlah baris sebanyak 25000095 dan 6 kolom menghasilkan keluaran:
+
+![image](https://github.com/user-attachments/assets/15360f96-8220-401c-92d7-5e4cf530cf1e)
+
+### 10. Menghapus Duplikasi
+Setelah membuat variabel preparation, tahap lainnya yaitu menghapus data duplikasi pada variabel preparation menggunakan fungsi `drop_duplicates` berdasarkan kolom movieId. Pada awalnya jumlah baris sebanyak 25000095 seperti gambar diatas. Namun, terjadi perubahan ketika sudah menghapus data duplikasi menjadi 59047 baris dan 6 kolom.
+
+![image](https://github.com/user-attachments/assets/5e9dba61-443b-490a-be92-f6a9fc2c139e)
+
+### 11. Konversi Kolom ke List
+Kemudian, melakukan proses konversi data series menjadi bentuk list menggunakan fungsi `tolist()`. Untuk data yang di konversi adalah data kolom movieId, title, dan genres, menghasilkan keluaran jumlah data sebesar 59047 pada masing-masing kolom:
+
+![image](https://github.com/user-attachments/assets/69bdb226-ea3c-4adc-be44-7c8ba5c5dddf)
+
+### 12. Pembuatan Dictionary Data
+Sebelum masuk tahap modeling, tahap selanjutnya melakukan pembuatan dictionary untuk menentukan pasangan key-value pada data movies_id, movies_title, dan movies_genres. Proses ini berisikan tiga kolom yaitu id yang berisikan movies_id, movies_title berisikan data movies_title, dan genres berisikan data movies_genres. Untuk jumlah baris datanya adalah 59047.
+
+![image](https://github.com/user-attachments/assets/d424c3a4-3ca5-43d5-8e10-ee1892014bf3)
+
+### 13. TF-IDF Vectorizer
+Tahap ini dilakukan untuk mengubah data genres menjadi dalam bentuk representasi numerik. Proses TF-IDF Vectorizer diawali dengan perhitungan idf pada data genres dan mapping array fitur index integer ke fitur nama, melalui fungsi `tfidfvectorizer()` dari library sklearn melalui kode:
 ```
+# Inisialisasi TfidfVectorizer
+tf = TfidfVectorizer()
+tf.fit(data['genres'])
+
+# Mapping array dari fitur index integer ke fitur nama
+tf.get_feature_names_out()
+```
+Kemudian, melakukan fit pada data genres dengan fungsi `fit_transform` dan mentransformasikan dalam bentuk matriks yang menghasilkan keluaran (59047, 20). Hal tersebut menunjukkan bahwa 59047 adalah ukuran data dan 20 merupakan matriks kategori genre dengan kode:
+```
+# Melakukan fit lalu ditransformasikan ke bentuk matrix
+tfidf_matrix = tf.fit_transform(data['genres'])
+
+# Melihat ukuran matrix tfidf
+tfidf_matrix.shape
+```
+Setelah itu, dilanjutkan dengan mengubah vektor tf-idf dalam bentuk matriks dengan menggunakan fungsi `todense()` dan melakukan pembatasan data hanya 1000 data saja. Dilanjutkan dengan membuat dataframe yang berisikan genre (kolom) dan judul film (baris). Hasil menunjukkan bahwa terdapat korelasi antara judul film dengan genre ditunjukkan adanya output 1.0 seperti:
+
+![image](https://github.com/user-attachments/assets/91291fbe-45ac-4f2b-8299-3a3411e42e77)
+
 
 ## Modeling
-Tahapan ini adalah tahapan Model Development di mana menggunakan algoritma machine learning untuk menjawab problem statement dari tahap business understanding. Pada tahap ini pengembangan model Machine Learning menggunakan 3 algoritma yaitu K-Nearest Neighbor, Random Forest, dan Algoritma Boosting.
-#### 1. K-Nearest Neighbor
-KNN adalah algoritma yang menggunakan kesamaan fitur untuk memprediksi nilai dari setiap data yang baru. Setiap data baru diberi nilai berdasarkan seberapa mirip titik tersebut dalam set pelatihan. Cara kerja dari KNN dengan menentukan nilai k yang menunjukkan jumlah tetangga terdekat dalam membuat sebuah prediksi. Penentuan nilai k yang terlalu kecil dapat membuat model overfitting sedangkan apabila nilai k terlalu besar dapat menyebabkan model underfitting. Selanjutnya, melakukan perhitungan ukuran jarak. Metrik pengukuran jarak secara default yaitu Minkowski distance, lalu metrik lain yang dapat digunakan seperti Euclidean distance dan Manhattan distance. Selain itu, dapat menemukan tetangga terdekat serta mengambil rata-rata untuk prediksi regresi. Dapat dikatakan bahwa KNN bekerja dengan membandingkan jarak satu sampel ke sampel pelatihan lain dengan memilih sejumlah k tetangga terdekat (dengan k adalah sebuah angka positif). Adapun parameter dalam algoritma yaitu ```n_neighbors=10``` di mana menggunakan k = 10 tetangga, ditunjukkan pada kode di bawah ini yang diawali import `KNeighborsRegressor` dan `mean_squared_error`  dari library sklearn.neighbors dan sklearn.metrics:
-```
-# Model Development - KNN
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
+Tahap ini dilakukan melalui pendekatan _Content Based Filtering_.
+### 1. _Content Based Filtering_
+Tahapan ini adalah melakukan pembangunan model sistem rekomendasi menggunakan pendekatan Content Based Filtering. Pendekatan ini dilakukan untuk mengetahui rekomendasi item yang mirip dengan item yang disukai pengguna yaitu film didasari pada kategori genre. Pendekatan ini diawali dengan mengubah data genres menjadi bentuk numerik pada proses TF-IDF. Selanjutnya dilakukan peninjauan kesamaan data judul film berdasarkan genre. Kesamaan ini akan dihitung melalui proses cosine similarity berdasarkan matrix tf_idf, sehingga dapat melakukan proses rekomendasi film. 
 
-knn = KNeighborsRegressor(n_neighbors=10)
-knn.fit(X_train, y_train)
+#### Cosine Similarity
+Cosine Similarity melakukan pengukuran derajat berdasarkan kesamaan atau seberapa mirip sebuah data. Adapun formula dari Cosine Similarity yaitu:
 
-models.loc['train_mse','knn'] = mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train)
-```
-Terdapat pula kelebihan dan kekurangan pada algoritma ini yaitu:
-- Kelebihan: mudah untuk digunakan dan dipahami.
-- Kekurangan: kurang efektif digunakan pada dataset yang besar serta prediksi akan memakan waktu cukup lama apabila dataset besar.
-     
-#### 2. Random Forest
-Random forest juga merupakan algoritma yang sering digunakan karena cukup sederhana tetapi memiliki stabilitas yang mumpuni. Random forest merupakan salah satu model machine learning yang termasuk ke dalam kategori ensemble (group) learning, di mana model prediksi yang terdiri dari beberapa model dan bekerja secara bersama-sama. Cara kerja dari Random Forest dapat melalui pendekatan bagging. Bagging atau teknik yang melatih model dengan sampel random. Dalam teknik bagging, sejumlah model dilatih dengan teknik sampling with replacement (proses sampling dengan penggantian). Kemudian memilih sejumlah fitur dan sejumlah sampel secara acak dari dataset yang terdiri dari n fitur dan m sampel. Dilanjutkan dengan membangun model secara independen untuk membuat prediksi. Kemudian, prediksi dari setiap model ensemble ini digabungkan untuk membuat prediksi akhir. Adapun parameter pada algoritma ini:
-- n_estimator: jumlah trees (pohon) di forest. 
-- max_depth: kedalaman atau panjang pohon. 
-- random_state: digunakan untuk mengontrol random number generator yang digunakan.
-- n_jobs: jumlah job yang digunakan secara paralel.
-Parameter tersebut diimplementasikan pada kode diawali dengan import `RandomForestRegressor` dari library scikit-learn:
-```
-# Model Development - Random Forest
-from sklearn.ensemble import RandomForestRegressor
+$$
+\cos(\theta) = \frac{A \cdot B}{\|A\| \|B\|}
+$$
 
-# buat model prediksi
-RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
-RF.fit(X_train, y_train)
+Keterangan:
+- A dan B adalah vektor yang akan dibandingkan kesamaannya.
+- A . B adalah dot product antara kedua vektor A dan B.
+- |A| dan |B| adalah panjang dari vektor A dan B.
+- |A||B| adalah cross product antara |A| dan |B|
 
-models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train)
+Proses cosine similarity dilakukan dengan menggunakan kode di bawah ini.
 ```
-Untuk kelebihan dan kekurangan meliputi: 
-- Kelebihan: dapat menangani hubungan non-linear.
-- Kekurangan: sulit untuk menginterpretasikan secara langsung output yang dihasilkan.
+# Membuat dataframe dari variabel cosine_sim dengan baris dan kolom berupa nama movie
+cosine_sim_df = pd.DataFrame(cosine_sim, index=data['movies_title'][:1000], columns=data['movies_title'][:1000])
+print('Shape:', cosine_sim_df.shape)
 
-#### 3. Algoritma Boosting
-Algoritma yang menggunakan teknik boosting bekerja dengan membangun model dari data latih. Kemudian ia membuat model kedua yang bertugas memperbaiki kesalahan dari model pertama. Model ditambahkan sampai data latih terprediksi dengan baik atau telah mencapai jumlah maksimum model untuk ditambahkan. Cara kerja dari algoritma ini yaitu menggabungkan beberapa model sederhana dan dianggap lemah (weak learners) sehingga membentuk suatu model yang kuat (strong ensemble learner). Kemudian melakukan proses identifikasi kesalahan melalui bobot yang lebih tinggi kemudian diberikan pada model yang salah sehingga akan dimasukkan ke dalam tahapan selanjutnya yaitu proses iteratif pada model untuk mencapai akurasi yang diinginkan. Parameter yang digunakan pada algoritma ini:
-- learning_rate: bobot yang diterapkan pada setiap regressor di masing-masing proses iterasi boosting.
-- random_state: digunakan untuk mengontrol random number generator yang digunakan.
-Parameter di atas diimplementasikan pada kode berikut dengan diawali import `AdaBoostRegressor` dari library sklearn.ensemble.
+# Melihat similarity matrix pada setiap movie
+cosine_sim_df.sample(5, axis=1).sample(10, axis=0)
 ```
-# Model Development - Algoritma Boosting
-from sklearn.ensemble import AdaBoostRegressor
+Tahapannya dilakukan dengan mengidentifikasi kesamaan antara film yang satu dengan yang lainnya, ditunjukkan dengan memiliki angka 1.0 mengindikasikan bahwa film pada kolom X (horizontal) memiliki kesamaan dengan film pada baris Y (vertikal). Shape yang digunakan berukuran (1000, 1000) seperti:
 
-boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)
-boosting.fit(X_train, y_train)
-models.loc['train_mse','Boosting'] = mean_squared_error(y_pred=boosting.predict(X_train), y_true=y_train)
+![image](https://github.com/user-attachments/assets/cc1f0715-9f3e-4817-a10c-47438328e98b)
+
+Dalam hal ini, terdapat kelebihan dan kekurangan pada pendekatan Content Based Filtering yaitu:
+- Kelebihan: dapat memberikan rekomendasi yang personal mengingat tidak bergantung pada pengguna lain.
+- Kekurangan: kurang efektif digunakan untuk rekomendasi item yang berbeda dari yang sudah disukai pengguna.
+
+Kemudian dilakukan proses rekomendasi melalui fungsi `def movies_recommendations`, terdiri dari beberapa parameter sebagai berikut:
+- Judul_film: judul_film (index kemiripan dataframe).
+- Similarity_data : Dataframe mengenai similarity yang telah kita definisikan sebelumnya yaitu cosine_sim_df.
+- Items : judul dan genre yang digunakan untuk mendefinisikan kemiripan, dalam hal ini adalah movies_title dan genres.
+- k : Banyak rekomendasi yang ingin diberikan yaitu berjumlah 5.
+Proses rekomendasi mengurutkan skor kemiripan pada 5 film teratas dengan kode:
 ```
-Kelebihan dan kekurangan algoritma Boosting:
-- Kelebihan: dapat menghasilkan model yang akurat.
-- Kekurangan: sensitif terhadap noise dan outlier.
+def movies_recommendations(judul_film, similarity_data=cosine_sim_df, items=data[['movies_title', 'genres']], k=5):
+
+    # Mengambil data dengan menggunakan argpartition untuk melakukan partisi secara tidak langsung sepanjang sumbu yang diberikan
+    # Dataframe diubah menjadi numpy
+    # Range(start, stop, step)
+    index = similarity_data.loc[:,judul_film].to_numpy().argpartition(
+        range(-1, -k, -1))
+
+    # Mengambil data dengan similarity terbesar dari index yang ada
+    closest = similarity_data.columns[index[-1:-(k+2):-1]]
+
+    # Drop judul_film agar nama movie yang dicari tidak muncul dalam daftar rekomendasi
+    closest = closest.drop(judul_film, errors='ignore')
+
+    return pd.DataFrame(closest).merge(items).head(k)
+```
+
+Rekomendasi di uji coba pada film dengan judul Toy Story (1995), melalui kode:
+```
+movies_recommendations('Toy Story (1995)')
+```
+Diperoleh 5 data teratas yaitu:
+
+| No | Judul Film                         | Genre                                           |
+|----|------------------------------------|-------------------------------------------------|
+| 0  | Space Jam (1996)                   | Adventure, Animation, Children, Comedy, Fantasy |
+| 1  | Pagemaster, The (1994)             | Action, Adventure, Animation, Children, Fantasy |
+| 2  | Kids of the Round Table (1995)     | Adventure, Children, Comedy, Fantasy            |
+| 3  | NeverEnding Story III, The (1994)  | Adventure, Children, Fantasy                    |
+| 4  | Jumanji (1995)                     | Adventure, Children, Fantasy                    |
+
+Hal ini menunjukkan 5 rekomendasi film dengan kategori genres yaitu Action, Adventure, Animation, Children, Comedy, dan Fantasy.
+
+![image](https://github.com/user-attachments/assets/2963e4e3-c2c7-41df-9ee3-c999d9f32988)
 
 ## Evaluation
-Tahap ini dilakukan untuk mengetahui performa model yang dilatih. Metrik evaluasi yang digunakan yaitu `Mean Squared Error (MSE)` yang menghitung jumlah selisih kuadrat rata-rata nilai sebenarnya dengan nilai prediksi. Adapun formula dari metrik evaluasi MSE yaitu:
+Tahap ini dilakukan untuk mengetahui hasil evaluasi dari sistem rekomendasi film. Metrik evaluasi yang digunakan yaitu Precision@k yang merupakan sebuah metrik yang melakukan pengukuran kesamaan untuk item pada hasil rekomendasi teratas atau k rekomendasi. Adapun formula dari Precision@ k yaitu:
 
-![image](https://github.com/user-attachments/assets/200df7fd-1a3d-4d49-8587-53a2f6c32d61)
+$$
+Precision@K = \frac{\text{Jumlah item relevan di top-K rekomendasi}}{K}
+$$
 
-Pada formula MSE tersebut, di mana N menunjukkan jumlah dataset. Untuk `yi` sebagai nilai sebenarnya dan `y_pred` adalah nilai prediksi. Selain itu, dapat ditinjau bahwa gambar dibawah ini merupakan hasil proyek berdasarkan metrik evaluasi pada data latih dan data test berdasarkan algoritma yang digunakan yaitu KNN, Random Forest, dan Boosting. Nilai MSE tidak dilakukan penskalaan sehingga masih dalam format satuan asli. Berikut hasil evaluasi model berdasarkan nilai MSE menggunakan algoritma KNN, Random Forest, dan Boosting pada data latih dan data uji pada masing-masing algoritma:
-
-|           | Train MSE             | Test MSE              |
-|-----------|-----------------------|-----------------------|
-| KNN       | 16840339303812.019531 | 26224980016413.128906 |
-| RF        | 9613303955776.796875  | 30023670100653.316406 |
-| Boosting  | 18904264506932.152344 | 25418562295376.261719 |
-
-Adapun untuk plot metriknya yang menginterpretasikan hasil evaluasi ketiga model algoritma melalui plot metrik menggunakan bar chart. Pada model Random Forest (RF) menunjukkan nilai error terkecil pada data train, menunjukkan bahwa model dapat mempelajari pola data latih dengan baik. Untuk data test, model Boosting memiliki error paling rendah, sehingga menunjukkan bahwa model ini memiliki kemampuan generalisasi yang lebih baik. Pada model KNN menunjukkan error yang cukup tinggi pada data train maupun test. Model terbaik yang dipilih untuk membantu memprediksi harga rumah yaitu model algoritma Boosting.
-
-![image](https://github.com/user-attachments/assets/1b4b8bb5-1030-4fb5-a4ff-0be1bf832606)
-
-Tahapan di bawah untuk membuat prediksi menggunakan beberapa harga dari data test menggunakan kode:
+Proses dilakukan dengan memanfaatkan fungsi `def precision_at_k_movies` melalui kode:
 ```
-# membuat prediksi menggunakan beberapa harga dari data test
-prediksi = X_test.iloc[:1].copy()
-pred_dict = {'y_true':y_test[:1]}
-for name, model in model_dict.items():
-    pred_dict['prediksi_'+name] = model.predict(prediksi).round(1)
+def precision_at_k_movies(movies_title, k=5):
+    k_recommendation = movies_recommendations(movies_title, k=k)
+    recommendation = k_recommendation['movies_title'].tolist()
 
-pd.DataFrame(pred_dict)
+    precision = len(recommendation) / k
+    return precision
 ```
-Berdasarkan kode diatas menghasilkan keluaran berupa tabel hasil prediksi dengan nama kolom y_true, prediksi_KNN, prediksi_RF, dan prediksi_Boosting. Proses prediksi dilakukan terhadap satu sampel dari data uji untuk mengamati nilai prediksi secara langsung. Hasil menunjukkan bahwa prediksi untuk model dengan algoritma Boosting yang nilainya cukup mendekati dengan nilai y_true dibandingkan dengan dua model lainnya yaitu K-Nearest Neighbor dan Random Forest.
+Hasil yang diperoleh dari proses precision@k yaitu 1.0 yang menunjukkan bahwa 5 film hasil rekomendasi teratas memiliki genre yang mirip dengan film Toy Story (1995). Dapat dikatakan bahwa sistem rekomendasi film menunjukkan hasil rekomendasi yang sesuai, di mana kode implementasinya:
+```
+print(precision_at_k_movies('Toy Story (1995)', k=5))
+```
 
-**Tabel Hasil Prediksi:**
+## Referensi
+[1]	M. Fajriansyah, P. P. Adikara, and A. W. Widodo, “Sistem Rekomendasi Film Menggunakan Content Based Filtering,” _J. Pengemb. Teknol. Inf. dan Ilmu Komput._, vol. 5, no. 6, pp. 2188–2199, 2021.
 
-|      | y_true  | prediksi_KNN | prediksi_RF | prediksi_Boosting |
-|------|---------|--------------|-------------|-------------------|
-| 7814 | 2763000 | 6718600.0    | 6854925.0   | 6165064.1         |
+[2]	K. R. Sari, W. Suharso, and Y. Azhar, “Pembuatan Sistem Rekomendasi Film dengan Menggunakan Metode Item Based Collaborative Filtering pada Apache Mahout,” _J. Repos._, vol. 2, no. 6, p. 767, 2020, doi: 10.22219/repositor.v2i6.936.
 
-**Referensi:**
+[3]	S. Lestari and M. M. Ramdhani, “Sistem Rekomendasi Film Menggunakan Metode Content-Based Filtering Studi Kasus Materi Data Mining Di Smk Idn Boarding School,” _J. Indones.  Manaj. Inform. dan Komun._, vol. 4, no. 3, pp. 1581–1587, 2023, doi: 10.35870/jimik.v4i3.381.
 
-[1]	Warjiyono, A. Nur Rais, I. Alfarobi, S. Wira Hadi, and W. Kurniawan, “Analisa Prediksi Harga Jual Rumah Menggunakan Algoritma Random Forest Machine Learning,” _JURSISTEKNI (Jurnal Sist. Inf. dan Teknol. Informasi)_, vol. 6, no. 2, pp. 416–423, 2024.
-
-[2]	M. L. Mu’tashim, T. Muhayat, S. A. Damayanti, H. N. Zaki, and R. Wirawan, “Analisis Prediksi Harga Rumah Sesuai Spesifikasi Menggunakan Multiple Linear Regression,” _Inform.  J. Ilmu Komput._, vol. 17, no. 3, p. 238, 2021, doi: 10.52958/iftk.v17i3.3635.
+[4]	E. R. Agustian, Munir, and E. P. Nugroho, “Sistem Rekomendasi Film Menggunakan Metode Collaborative Filtering dan K-Nearest Neighbors,” J_ATIKOM J. Apl. dan Teor. Ilmu Komput._, vol. 3, no. 1, pp. 18–21, 2020, [Online]. Available: https://ejournal.upi.edu/index.php/JATIKOM
